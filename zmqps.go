@@ -31,7 +31,7 @@ type pubSub struct {
 type PubSub interface {
 	Publish([]byte) (*zmq.Socket, error)
 	Subscribe(Listener)
-	PublishAcknowledgement() error
+	publishAcknowledgement() error
 	SubscribeAcknowledgement(Acknowledgement) error
 }
 

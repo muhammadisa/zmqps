@@ -17,8 +17,7 @@ func sendEventTime(pubSub zmqps.PubSub) {
 		Time: time.Now().Unix(),
 	})
 
-	_, _ = pubSub.Publish(jsonByte)
-	err := pubSub.PublishAcknowledgement()
+	_, err := pubSub.Publish(jsonByte)
 	if err != nil {
 		fmt.Println(err)
 		sendEventTime(pubSub)
