@@ -42,12 +42,15 @@ func main() {
 	}
 
 	pubSub.Subscribe(func(msg []byte, err error) {
+		if err != nil {
+			fmt.Println("ERROR FROM SUBSCRIBER", err)
+		}
 		fmt.Println(string(msg))
-
 		rand.Seed(time.Now().Unix())
 		knowledge := mockingAcknowledgement()
+		err = pubSub.SubscribeAcknowledgement(knowledge)
 		if err != nil {
-			fmt.Println("ERROR", err)
+			fmt.Println("ERROR SEND ACKNOWLEDGEMENT", err)
 		}
 		fmt.Println(knowledge)
 	})
