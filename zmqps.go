@@ -6,23 +6,28 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-const (
-	DefaultFlag = 0
-)
+// DefaultFlag is int for set a flag when Recv and Send of zero mq library
+const DefaultFlag = 0
 
+// Type is type for represent mode of message queue PUB or SUB
 type Type int
 
 const (
+	// PUB is type for Publisher mode
 	PUB Type = 0
+	// SUB is type for subscriber mode
 	SUB Type = 1
 )
 
+// Listener is function type for subscriber mode for receiving message and error
+type Listener func(msg []byte, err error)
+
+// pubSub struct for PubSub interface implementation
 type pubSub struct {
 	Socket *zmq.Socket
 }
 
-type Listener func(msg []byte, err error, socket *zmq.Socket)
-
+// PubSub zmqps main public function definitions
 type PubSub interface {
 	Publish([]byte) (*zmq.Socket, error)
 	Subscribe(Listener)
@@ -30,7 +35,8 @@ type PubSub interface {
 	SubscribeAcknowledgement(Acknowledgement) error
 }
 
-func connectAsPublisher(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
+// startAsPublisher start socket as publisher mode
+func startAsPublisher(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
 	socket, err := zctx.NewSocket(zmq.REQ)
 	if err != nil {
 		return nil, err
@@ -42,7 +48,8 @@ func connectAsPublisher(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
 	return socket, nil
 }
 
-func connectAsSubscriber(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
+// startAsSubscriber start socket as subscriber mode
+func startAsSubscriber(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
 	socket, err := zctx.NewSocket(zmq.REP)
 	if err != nil {
 		return nil, err
@@ -54,6 +61,7 @@ func connectAsSubscriber(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
 	return socket, nil
 }
 
+// New create PubSub zmqps
 func New(t Type, host, port string) (PubSub, error) {
 	var err error
 	var socket *zmq.Socket
@@ -63,12 +71,12 @@ func New(t Type, host, port string) (PubSub, error) {
 
 	switch {
 	case t == PUB:
-		socket, err = connectAsPublisher(zctx, URL)
+		socket, err = startAsPublisher(zctx, URL)
 		if err != nil {
 			return nil, err
 		}
 	case t == SUB:
-		socket, err = connectAsSubscriber(zctx, URL)
+		socket, err = startAsSubscriber(zctx, URL)
 		if err != nil {
 			return nil, err
 		}

@@ -12,8 +12,9 @@ func (ps pubSub) PublishAcknowledgement() error {
 	if len(messages) > 1 {
 		acknowledgement.State = State(messages[0])
 		acknowledgement.Message = Reason(messages[1])
+	} else {
+		acknowledgement.State = State(msg)
+		acknowledgement.Message = BlankReason
 	}
-	acknowledgement.State = State(msg)
-	acknowledgement.Message = BlankReason
 	return acknowledgement.Reason()
 }

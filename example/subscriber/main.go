@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/muhammadisa/zmqps"
-	zmq "github.com/pebbe/zmq4"
 	"math/rand"
 	"time"
 )
@@ -42,12 +41,11 @@ func main() {
 		panic(err)
 	}
 
-	pubSub.Subscribe(func(msg []byte, err error, socket *zmq.Socket) {
+	pubSub.Subscribe(func(msg []byte, err error) {
 		fmt.Println(string(msg))
 
 		rand.Seed(time.Now().Unix())
 		knowledge := mockingAcknowledgement()
-		err = pubSub.SubscribeAcknowledgement(knowledge)
 		if err != nil {
 			fmt.Println("ERROR", err)
 		}

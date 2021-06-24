@@ -42,8 +42,3 @@ func (a Acknowledgement) Reason() error {
 		return errors.New("unknown acknowledgement status")
 	}
 }
-
-// StateAsString is a function for convert State to string
-func (a Acknowledgement) StateAsString() string {
-	return string(a.State)
-}
