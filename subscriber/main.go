@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/muhammadisa/zmqps"
 	zmq "github.com/pebbe/zmq4"
+	"math/rand"
+	"time"
 )
 
 func main() {
@@ -12,9 +14,15 @@ func main() {
 		panic(err)
 	}
 
-	pubSub.Subscribe(func(msg string, err error, socket *zmq.Socket) {
-		fmt.Println(msg)
-		_, _ = socket.Send("OK", zmqps.DefaultFlag)
+	randomAcknowledgement := []zmqps.Acknowledgement{zmqps.NACK, zmqps.ACK}
+
+	pubSub.Subscribe(func(msg []byte, err error, socket *zmq.Socket) {
+		fmt.Println(string(msg))
+
+		rand.Seed(time.Now().Unix())
+		acknlgm := randomAcknowledgement[rand.Intn(len(randomAcknowledgement))]
+		pubSub.SubscribeAcknowledgement(acknlgm)
+		fmt.Println(acknlgm)
 	})
 
 }
