@@ -6,32 +6,6 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-type Acknowledgement string
-
-const (
-	ACK  Acknowledgement = `ACK`
-	NACK Acknowledgement = `NACK`
-)
-
-func (a Acknowledgement) Reason() error {
-	switch {
-	case a == ACK:
-		return nil
-	case a == NACK:
-		return errors.New("nack message is not received")
-	default:
-		return errors.New("unknown acknowledgement status")
-	}
-}
-
-func (a Acknowledgement) String() string {
-	return string(a)
-}
-
-func AsAcknowledgement(data string) Acknowledgement {
-	return Acknowledgement(data)
-}
-
 const (
 	DefaultFlag = 0
 )
@@ -53,19 +27,7 @@ type PubSub interface {
 	Publish([]byte) (*zmq.Socket, error)
 	Subscribe(Listener)
 	PublishAcknowledgement() error
-	SubscribeAcknowledgement(Acknowledgement)
-}
-
-func (ps pubSub) PublishAcknowledgement() error {
-	msg, err := ps.Socket.Recv(DefaultFlag)
-	if err != nil {
-		return err
-	}
-	return AsAcknowledgement(msg).Reason()
-}
-
-func (ps pubSub) SubscribeAcknowledgement(acknowledgement Acknowledgement) {
-	_, _ = ps.Socket.Send(acknowledgement.String(), DefaultFlag)
+	SubscribeAcknowledgement(Acknowledgement) error
 }
 
 func connectAsPublisher(zctx *zmq.Context, URL string) (*zmq.Socket, error) {

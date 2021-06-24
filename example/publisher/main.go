@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	fmt "fmt"
 	"github.com/google/uuid"
 	"github.com/muhammadisa/zmqps"
 	"time"
