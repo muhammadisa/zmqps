@@ -2,7 +2,7 @@ package zmqps
 
 import "fmt"
 
-// SubscribeAcknowledgement send back to the publisher state and reason of the message that has been received
+// SubscribeAcknowledgement send back to the publisherA state and reason of the message that has been received
 func (ps pubSub) SubscribeAcknowledgement(acknowledgement Acknowledgement) error {
 	var state = string(acknowledgement.State)
 	var message = string(acknowledgement.Message)

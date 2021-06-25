@@ -35,7 +35,7 @@ type PubSub interface {
 	SubscribeAcknowledgement(Acknowledgement) error
 }
 
-// startAsPublisher start socket as publisher mode
+// startAsPublisher start socket as publisherA mode
 func startAsPublisher(zctx *zmq.Context, URL string) (*zmq.Socket, error) {
 	socket, err := zctx.NewSocket(zmq.REQ)
 	if err != nil {

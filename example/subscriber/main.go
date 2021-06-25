@@ -48,7 +48,10 @@ func main() {
 		fmt.Println(string(msg))
 		rand.Seed(time.Now().Unix())
 		knowledge := mockingAcknowledgement()
-		err = pubSub.SubscribeAcknowledgement(knowledge)
+		err = pubSub.SubscribeAcknowledgement(zmqps.Acknowledgement{
+			State:   zmqps.NACK,
+			Message: messageCannotBeUnmarshalled,
+		})
 		if err != nil {
 			fmt.Println("ERROR SEND ACKNOWLEDGEMENT", err)
 		}

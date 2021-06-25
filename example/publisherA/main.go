@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	fmt "fmt"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/muhammadisa/zmqps"
 	"time"
@@ -10,11 +10,13 @@ import (
 
 func sendEventTime(pubSub zmqps.PubSub) {
 	jsonByte, _ := json.Marshal(struct {
-		UUID string `json:"uuid"`
-		Time int64  `json:"time"`
+		Publisher string
+		UUID      string `json:"uuid"`
+		Time      int64  `json:"time"`
 	}{
-		UUID: uuid.New().String(),
-		Time: time.Now().Unix(),
+		Publisher: "A",
+		UUID:      uuid.New().String(),
+		Time:      time.Now().Unix(),
 	})
 
 	_, err := pubSub.Publish(jsonByte)

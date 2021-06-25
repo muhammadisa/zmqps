@@ -40,6 +40,13 @@ func (ts *AcknowledgementTestSuite) TestReason() {
 			},
 			WantError: true,
 		},
+		{
+			A: Acknowledgement{
+				State:   State("UNKNOWN"),
+				Message: Reason("message is corrupt"),
+			},
+			WantError: true,
+		},
 	}
 
 	for i, test := range tests {
